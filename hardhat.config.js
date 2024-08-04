@@ -5,7 +5,7 @@
 require("@nomiclabs/hardhat-waffle");
 
 module.exports = {
-  solidity: "0.6.11",
+  solidity: "0.7.1",
 //   networks: {
 //     hardhat: {},
 //    

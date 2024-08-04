@@ -73,9 +73,67 @@ template Sudoku () {
     3 === row4[3].out + row4[2].out + row4[1].out + row4[0].out; 
 
     // Write your solution from here.. Good Luck!
+    component rowResult[4];
     
+    for(var i=0; i<4; i++){
+        rowResult[i] = IsEqual();
+        var sum = solution[4*i] + solution[4*i+1] + solution[4*i+2] + solution[4*i+3];
+        rowResult[i].in[0] <== sum;
+        rowResult[i].in[1] <== 10;
+    }
+
+    component columnResult[4];
     
-   
+    for(var i=0; i<4; i++){
+        columnResult[i] = IsEqual();
+        var sum = solution[i] + solution[i+4] + solution[i+8] + solution[i+12];
+        columnResult[i].in[0] <== sum;
+        columnResult[i].in[1] <== 10;
+    }
+
+    
+    component miniSquareResult[4];
+
+    for(var i=0; i < 2; i++){
+        miniSquareResult[2*i] = IsEqual();
+        var sum = solution[i*8] + solution[8*i+1] + solution[8*i+4] + solution[8*i+4+1];
+        miniSquareResult[2*i].in[0] <== sum;
+        miniSquareResult[2*i].in[1] <== 10;
+
+        miniSquareResult[2*i+1] = IsEqual();
+        sum = solution[8*i + 2] + solution[8*i+3] + solution[8*i+2+4] + solution[8*i+2+4+1];
+        miniSquareResult[2*i+1].in[0] <== sum;
+        miniSquareResult[2*i+1].in[1] <== 10;
+    }
+
+    signal row_01; 
+    row_01 <-- rowResult[0].out * rowResult[1].out;
+    signal row_23; 
+    row_23 <-- rowResult[2].out * rowResult[3].out;
+
+    signal rowValue;
+    rowValue <== row_01 * row_23;
+
+    signal column_01; 
+    column_01 <-- columnResult[0].out * columnResult[1].out;
+    signal column_23; 
+    column_23 <-- columnResult[2].out * columnResult[3].out;
+
+    signal columnValue;
+    columnValue <== column_01 * column_23;
+
+    signal rowColumn;
+    rowColumn <== rowValue*columnValue;
+
+    signal miniSquare_01;
+    miniSquare_01 <-- miniSquareResult[0].out * miniSquareResult[1].out;
+    signal miniSquare_23;
+    miniSquare_23 <-- miniSquareResult[2].out * miniSquareResult[3].out;
+
+    signal squareValue;
+    squareValue <== miniSquare_01 * miniSquare_23;
+
+    out <== squareValue * rowColumn;
 }
 
 
